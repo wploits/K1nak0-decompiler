@@ -42,7 +42,6 @@ impl Namer {
                 }
             }
             
-            // Add hint for table containing RemoteEvent/RemoteFunction
             if let Statement::GenericFor(generic_for) = statement {
                 if generic_for.res_locals.len() == 2 {
                     if let Some(local_v2) = generic_for.right.get(0).and_then(|r| r.as_local()) {
