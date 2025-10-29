@@ -1,6 +1,8 @@
 edited scfmod's medal.
+
 like HTTP request decompiling (only POST BASE64-encrypted bytecode)
 
+Thanks to scfmod and original medal dev!
 ____
 Looking for coder(s) to implement proper use of debug information for naming locals and parameters.
 ____
