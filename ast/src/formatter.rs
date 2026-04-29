@@ -333,6 +333,11 @@ impl<'a, W: fmt::Write> Formatter<'a, W> {
         write!(self.output, "function(")?;
         self.format_closure_parameters(closure)?;
         write!(self.output, ")")?;
+        let function = closure.function.lock();
+        if let Some(name) = &function.name {
+            write!(self.output, " -- name: {}", name)?;
+        }
+        drop(function);
         self.format_closure_body(closure)?;
         write!(self.output, "end")
     }
@@ -341,6 +346,11 @@ impl<'a, W: fmt::Write> Formatter<'a, W> {
         write!(self.output, "function {}(", name)?;
         self.format_closure_parameters(closure)?;
         write!(self.output, ")")?;
+        let function = closure.function.lock();
+        if let Some(fname) = &function.name {
+            write!(self.output, " -- name: {}", fname)?;
+        }
+        drop(function);
         self.format_closure_body(closure)?;
         write!(self.output, "end")
     }
@@ -362,7 +372,6 @@ impl<'a, W: fmt::Write> Formatter<'a, W> {
                 } else {
                     write!(self.output, "-math.huge")?;
                 }
-
                 Ok(())
             }
             RValue::Literal(Literal::Number(n)) if n.is_nan() => {
