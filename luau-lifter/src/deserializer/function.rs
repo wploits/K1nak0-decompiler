@@ -44,7 +44,6 @@ impl Function {
                 Instruction::E { op_code, .. } => op_code,
             };
 
-            // handle ops with aux values
             match op {
                 OpCode::LOP_GETGLOBAL
                 | OpCode::LOP_SETGLOBAL
@@ -68,7 +67,10 @@ impl Function {
                 | OpCode::LOP_JUMPXEQKNIL
                 | OpCode::LOP_JUMPXEQKB
                 | OpCode::LOP_JUMPXEQKN
-                | OpCode::LOP_JUMPXEQKS => {
+                | OpCode::LOP_JUMPXEQKS
+                | OpCode::LOP_GETUDATAKS
+                | OpCode::LOP_SETUDATAKS
+                | OpCode::LOP_NAMECALLUDATA => {
                     let aux = vec[pc + 1];
                     pc += 2;
                     match ins {
@@ -125,7 +127,6 @@ impl Function {
         };
 
         let (input, u32_instructions) = parse_list(input, le_u32)?;
-        //let (input, instructions) = parse_list(input, Function::parse_instrution)?;
         let instructions = Self::parse_instructions(&u32_instructions, encode_key);
         let (input, constants) = parse_list(input, Constant::parse)?;
         let (input, functions) = parse_list(input, leb128_usize)?;
@@ -161,7 +162,6 @@ impl Function {
         let input = match le_u8(input)? {
             (input, 0) => input,
             (input, _) => {
-                // panic!("we have debug info");
                 let (mut input, num_locvars) = leb128_usize(input)?;
                 for _ in 0..num_locvars {
                     (input, _) = leb128_usize(input)?;
