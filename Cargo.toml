@@ -1,3 +1,5 @@
+cargo-features = ["trim-paths"]
+
 [workspace]
 members = [
     "cfg",
@@ -18,7 +20,8 @@ authors = [
 ]
 
 [profile.release]
-debug = true
+debug = false
 lto = true
-# strip = true
-# panic = "abort"
+strip = true
+panic = "abort"
+trim-paths = true
